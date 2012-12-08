@@ -2,7 +2,7 @@ $(function() {
 	var Todo = Backbone.Model.extend();
 	var Todos = Backbone.Collection.extend({
 		model:Todo,
-		url:'/todos'
+		localStrage:new Store('todos')
 	});
 	var todos = new Todos();
 	var Item_View = Backbone.View.extend({
