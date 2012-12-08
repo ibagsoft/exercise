@@ -7,6 +7,8 @@ var todos = new Todos();
 var Todo_View = Backbone.View.extend({
 	el:$('#todo'),
 	initialize:function() {
+		console.log();
+		_.bindAll(this,'addAll');
 		this.input = $('#new_todo');
 		todos.bind('reset',this.addAll);
 		todos.fetch();
@@ -15,8 +17,12 @@ var Todo_View = Backbone.View.extend({
 		'keypress #new_todo':'addOne'
 	},
 	addAll:function() {
+		var that = this;
 		todos.each(function(todo) {
-			console.log(todo.get('title'));
+			var li_template = "<li><%=title%></li>";
+			var tmpl = _.template(li_template);
+			var li = tmpl(todo.toJSON());
+			that.$el.append(li);
 		});
 	},
 	addOne:function(e) {
