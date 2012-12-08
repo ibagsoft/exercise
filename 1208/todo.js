@@ -4,11 +4,21 @@ var Todos = Backbone.Collection.extend({
 	localStorage:new Store('todos')
 });
 var todos = new Todos();
+var Item_View = Backbone.View.extend({
+	tagName:'li',
+	className:'btn btn-large',
+	initialize:function() {
+		this.render();
+	},
+	tmpl:_.template("<%=title%>"),
+	render:function() {
+		this.$el.html(this.tmpl(this.model.toJSON()));
+		return this;
+	}
+});
 var Todo_View = Backbone.View.extend({
 	el:$('#todo'),
-	tmpl:_.template("<li><%=title%></li>"),
 	initialize:function() {
-		console.log();
 		_.bindAll(this,'addAll','addOne');
 		this.input = $('#new_todo');
 		todos.bind('reset',this.addAll);
@@ -19,8 +29,8 @@ var Todo_View = Backbone.View.extend({
 		'keypress #new_todo':'enterTodo'
 	},
 	addOne:function(todo) {
-		var li = this.tmpl(todo.toJSON());
-		this.$el.append(li);
+		var item = new Item_View({model:todo});
+		this.$el.append(item.el);
 	},
 	addAll:function() {
 		var that = this;
